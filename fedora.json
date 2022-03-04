@@ -1,0 +1,60 @@
+{
+  "variables": {
+    "username": "root@pam",
+    "password": "testPassword"
+  },
+  "builders": [
+    {
+      "type" : "proxmox",
+      "proxmox_url": "https://pvemaster.fqdn:8006/api2/json",
+      "insecure_skip_tls_verify": true,
+      "username" : "{{user `username`}}",
+      "password": "{{user `password`}}",
+
+      "node": "copernico",
+      "vm_name": "fedora-base",
+      "network_adapters": [
+        {
+          "bridge": "vmbr0"
+        }
+      ],
+      "disks": [
+        {
+          "type": "scsi",
+          "disk_size": "5G",
+          "storage_pool":"local-lvm",
+          "storage_pool_type": "lvm"
+        },
+        {
+          "type": "scsi",
+          "disk_size": "5G",
+          "storage_pool":"local-lvm",
+          "storage_pool_type": "lvm"
+        },
+        {
+          "type": "scsi",
+          "disk_size": "5G",
+          "storage_pool":"local-lvm",
+          "storage_pool_type": "lvm"
+        }
+      ],
+      "iso_file": "local:iso/fedora.iso",
+      "http_directory": "config",
+      "boot_wait": "10s",
+      "boot_command": [
+        "<up><tab> ip=dhcp inst.cmdline inst.ks=http://localIP:{{.HTTPPort}}/ks.cfg<enter>"
+      ],
+      "ssh_username": "root",
+      "ssh_password": "testPassword",
+      "ssh_host": "ip_address",
+      "ssh_clear_authorized_keys": "true",
+      "ssh_timeout": "20m",
+      "ssh_handshake_attempts": "100",
+      "iso_storage_pool": "local-lvm",
+      "iso_checksum": "4962e7136516120d40e4289ede5a974d",
+      "unmount_iso": "true",
+            "template_name": "fedora-29",
+            "template_description": "Fedora 29-1.2, generated on {{ isotime \"2006-01-02T15:04:05Z\" }}"
+    }
+  ]
+}
